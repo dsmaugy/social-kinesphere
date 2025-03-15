@@ -126,6 +126,7 @@ def run_osc():
 osc_thread = threading.Thread(target=run_osc, daemon=True)
 osc_thread.start()
 
+root.attributes("-fullscreen", True)
 root.configure(bg="black")
 root.bind("<q>", lambda _: root.destroy())
 root.bind("<Up>", lambda _: increase_width())
