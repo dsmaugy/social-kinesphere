@@ -1,4 +1,4 @@
-# ln -s <path> /etc/systemd/system/void.service
+# ln -s <path> ~/.config/systemd/user/void.service
 
 [Unit]
 Description=Social Kinesphere Projections

@@ -163,6 +163,8 @@ if os.getenv("DEBUG", "false") == "true":
 
 root.attributes("-fullscreen", True)
 root.configure(bg="black")
+root.configure(cursor="none")
+
 root.bind("<q>", lambda _: root.destroy())
 root.bind("<Up>", lambda _: increase_width())
 root.bind("<Down>", lambda _: decrease_width())
