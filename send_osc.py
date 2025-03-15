@@ -8,7 +8,7 @@ client = udp_client.SimpleUDPClient(ip, port)
 
 
 def main():
-    client.send_message("/mix", [0])
+    client.send_message("/mix", [0.1])
 
 
 if __name__ == "__main__":

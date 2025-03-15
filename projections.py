@@ -115,10 +115,10 @@ def handle_osc(address, *args):
     if address == "/quit":
         root.destroy()
     elif address == "/mix":
-        if len(args) > 0 and args[0]:
+        if len(args) > 0:
             try:
                 global video_mix
-                video_mix = max(min(float(args[0]), 0.0), 1.0)
+                video_mix = max(min(float(args[0]), 1.0), 0.0)
                 print(f"video mix: {video_mix}")
             except ValueError:
                 print(f"ERROR: Cannot convert {args[0]} to float")
