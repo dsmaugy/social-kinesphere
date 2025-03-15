@@ -119,6 +119,7 @@ def handle_osc(address, *args):
             try:
                 global video_mix
                 video_mix = max(min(float(args[0]), 0.0), 1.0)
+                print(f"video mix: {video_mix}")
             except ValueError:
                 print(f"ERROR: Cannot convert {args[0]} to float")
                 pass

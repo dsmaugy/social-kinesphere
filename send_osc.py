@@ -2,13 +2,13 @@ import time
 
 from pythonosc import udp_client
 
-ip = "127.0.0.1"
+ip = "192.168.0.194"
 port = 8085
 client = udp_client.SimpleUDPClient(ip, port)
 
 
 def main():
-    client.send_message("/projection", [0.5])
+    client.send_message("/mix", [0])
 
 
 if __name__ == "__main__":
