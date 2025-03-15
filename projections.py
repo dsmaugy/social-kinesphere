@@ -8,7 +8,7 @@ from PIL import Image, ImageTk
 from pythonosc import dispatcher, osc_server
 
 MAX_FRAME_DELAY = 1000
-MIN_FRAME_DELAY = 50
+MIN_FRAME_DELAY = 10
 OSC_PORT = 8085
 
 video = cv2.VideoCapture("videos/art1.mp4")
