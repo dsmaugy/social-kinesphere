@@ -128,12 +128,16 @@ def debug_terminal():
         cmd = input("control: ")
         if cmd == "o":
             decrease_mix()
+            print(f"mix: {video_mix}")
         elif cmd == "p":
             increase_mix()
+            print(f"mix: {video_mix}")
         elif cmd == "k":
             decrease_speed()
+            print(f"frame delay: {frame_delay}")
         elif cmd == "l":
             increase_speed()
+            print(f"frame delay: {frame_delay}")
         elif cmd == "q":
             root.destroy()
             return
