@@ -134,6 +134,9 @@ def debug_terminal():
             decrease_speed()
         elif cmd == "l":
             increase_speed()
+        elif cmd == "q":
+            root.destroy()
+            return
 
 
 osc_thread = threading.Thread(target=run_osc, daemon=True)
