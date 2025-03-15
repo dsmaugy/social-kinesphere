@@ -111,7 +111,17 @@ def increase_mix():
 
 
 def handle_osc(address, *args):
-    pass
+    print(f"osc msg: {address} {args}")
+    if address == "/quit":
+        root.destroy()
+    elif address == "/mix":
+        if len(args) > 0 and args[0]:
+            try:
+                global video_mix
+                video_mix = max(min(float(args[0]), 0.0), 1.0)
+            except ValueError:
+                print(f"ERROR: Cannot convert {args[0]} to float")
+                pass
 
 
 def run_osc():
