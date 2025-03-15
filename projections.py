@@ -11,7 +11,7 @@ MAX_FRAME_DELAY = 1000
 MIN_FRAME_DELAY = 10
 OSC_PORT = 8085
 
-video = cv2.VideoCapture("videos/art1.mp4")
+video = cv2.VideoCapture("videos/art1-fast.mp4")
 video2 = cv2.VideoCapture("videos/art2.mp4")
 if video.isOpened() and video2.isOpened():
     print("Video Succefully opened")
