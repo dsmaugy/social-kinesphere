@@ -8,8 +8,8 @@ Wants=network-online.target
 [Service]
 ExecStart=/home/void3/social-kinesphere/start.sh
 WorkingDirectory=/home/void3/social-kinesphere
-StandardOutput=inherit
-StandardError=inherit
+StandardOutput=journal
+StandardError=journal
 Restart=always
 User=void3
 
