@@ -1,3 +1,4 @@
+import os
 import threading
 import tkinter as tk
 
@@ -76,7 +77,6 @@ def update_frame():
     label.imgtk = imgtk
     label.config(image=imgtk)
 
-    print(video_mix)
     root.after(frame_delay, update_frame)
 
 
@@ -123,8 +123,25 @@ def run_osc():
     server.serve_forever()
 
 
+def debug_terminal():
+    while True:
+        cmd = input("control: ")
+        if cmd == "o":
+            decrease_mix()
+        elif cmd == "p":
+            increase_mix()
+        elif cmd == "k":
+            decrease_speed()
+        elif cmd == "l":
+            increase_speed()
+
+
 osc_thread = threading.Thread(target=run_osc, daemon=True)
 osc_thread.start()
+
+if os.getenv("DEBUG", "false") == "true":
+    debug_thread = threading.Thread(target=debug_terminal, daemon=True)
+    debug_thread.start()
 
 root.attributes("-fullscreen", True)
 root.configure(bg="black")
