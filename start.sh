@@ -1,3 +1,4 @@
 #!/bin/bash
 
-poetry run python projections.py
+poetry_bin=$(which poetry)
+$poetry_bin run python projections.py
