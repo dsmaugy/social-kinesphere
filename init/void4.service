@@ -1,0 +1,16 @@
+# ln -s <path> ~/.config/systemd/user/void.service
+
+[Unit]
+Description=Social Kinesphere Projections
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/home/void4/social-kinesphere/start.sh
+WorkingDirectory=/home/void4/social-kinesphere
+StandardOutput=journal
+StandardError=journal
+Restart=always
+
+[Install]
+WantedBy=default.target
