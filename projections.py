@@ -1,4 +1,5 @@
 import os
+import socket
 import threading
 import tkinter as tk
 
@@ -11,8 +12,24 @@ MAX_FRAME_DELAY = 1000
 MIN_FRAME_DELAY = 10
 OSC_PORT = 8085
 
-video = cv2.VideoCapture("videos/art1-fast.mp4")
-video2 = cv2.VideoCapture("videos/art2.mp4")
+host = socket.gethostname()
+
+if host == "void1":
+    video = cv2.VideoCapture("videos/void1.1.mp4")
+    video2 = cv2.VideoCapture("videos/void1.2.mp4")
+elif host == "void2":
+    video = cv2.VideoCapture("videos/void2.1.mp4")
+    video2 = cv2.VideoCapture("videos/void2.2.mp4")
+elif host == "void3":
+    video = cv2.VideoCapture("videos/void3.mp4")
+    video2 = cv2.VideoCapture("videos/void3.mp4")
+elif host == "void4":
+    video = cv2.VideoCapture("videos/void4.mp4")
+    video2 = cv2.VideoCapture("videos/void4.mp4")
+else:
+    video = cv2.VideoCapture("videos/void1.1.mp4")
+    video2 = cv2.VideoCapture("videos/void1.2.mp4")
+
 if video.isOpened() and video2.isOpened():
     print("Video Succefully opened")
 else:
