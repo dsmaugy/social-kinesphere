@@ -117,7 +117,7 @@ def update_frame():
     label.imgtk = imgtk
     label.config(image=imgtk)
 
-    tk_frame.set(tk_frame.get() + 1)
+    tk_frame.set(frame_num + 1)
     root.after(frame_delay, update_frame)
 
 
