@@ -4,7 +4,6 @@ import threading
 import tkinter as tk
 
 import cv2
-import numpy as np
 from PIL import Image, ImageTk
 from pythonosc import dispatcher, osc_server
 
@@ -14,21 +13,28 @@ OSC_PORT = 8085
 
 host = socket.gethostname()
 
+if not host.startswith("void"):
+    host = "void1"
+
 if host == "void1":
     video = cv2.VideoCapture("videos/void1.1.mp4")
     video2 = cv2.VideoCapture("videos/void1.2.mp4")
+    defaultVideo = cv2.VideoCapture("videos/void1-default.mp4")
 elif host == "void2":
     video = cv2.VideoCapture("videos/void2.1.mp4")
     video2 = cv2.VideoCapture("videos/void2.2.mp4")
+    defaultVideo = cv2.VideoCapture("videos/void2-default.mp4")
 elif host == "void3":
     video = cv2.VideoCapture("videos/void3.mp4")
     video2 = cv2.VideoCapture("videos/void3.mp4")
+    defaultVideo = cv2.VideoCapture("videos/void3-default.mp4")
 elif host == "void4":
     video = cv2.VideoCapture("videos/void4.mp4")
     video2 = cv2.VideoCapture("videos/void4.mp4")
+    defaultVideo = cv2.VideoCapture("videos/void4-default.mp4")
 else:
-    video = cv2.VideoCapture("videos/void1.1.mp4")
-    video2 = cv2.VideoCapture("videos/void1.2.mp4")
+    print("Hostname not correct")
+    exit(-1)
 
 if video.isOpened() and video2.isOpened():
     print("Video Succefully opened")
@@ -43,22 +49,27 @@ label.pack()
 
 projection_width = 800
 frame_delay = 100
-video_mix = 1.0
+video_mix = 0.0
 
 
 def get_next_video_frame(mix=1.0):
-    global video, video2
-    ret, frame = video.read()
-    if not ret:
-        video.set(cv2.CAP_PROP_POS_FRAMES, 0)
-        # assume that this will always work
-        _, frame = video.read()
+    global video, video2, defaultVideo
 
-    if mix < 1.0:
+    if mix == 0.0:
+        ret, frame = defaultVideo.read()
+        if not ret:
+            defaultVideo.set(cv2.CAP_PROP_POS_FRAMES, 0)
+            _, frame = defaultVideo.read()
+    else:
+        ret, frame = video.read()
+        if not ret:
+            video.set(cv2.CAP_PROP_POS_FRAMES, 0)
+            _, frame = video.read()
+
+    if mix < 1.0 and mix > 0.0:
         ret, frame2 = video2.read()
         if not ret:
             video2.set(cv2.CAP_PROP_POS_FRAMES, 0)
-            # assume that this will always work
             _, frame2 = video2.read()
 
         frame = cv2.addWeighted(frame, mix, frame2, 1.0 - mix, 0)
