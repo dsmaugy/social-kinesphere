@@ -1,3 +1,4 @@
+import math
 import os
 import socket
 import threading
@@ -14,7 +15,7 @@ OSC_PORT = 8085
 host = socket.gethostname()
 
 if not host.startswith("void"):
-    host = "void1"
+    host = "void2"
 
 if host == "void1":
     video = cv2.VideoCapture("videos/void1.1.mp4")
@@ -41,8 +42,14 @@ if video.isOpened() and video2.isOpened():
 else:
     print("Something went wrong check if the video name and path is correct")
 
+if host == "void1" or host == "void2":
+    BLENDING_ACTIVE = True
+else:
+    BLENDING_ACTIVE = False
+
 root = tk.Tk()
 root.title("Projections")
+tk_frame = tk.IntVar(value=0)
 
 label = tk.Label(root)
 label.pack()
@@ -53,7 +60,7 @@ video_mix = 0.0
 
 
 def get_next_video_frame(mix=1.0):
-    global video, video2, defaultVideo
+    global video, video2, defaultVideo, BLENDING_ACTIVE
 
     if mix == 0.0:
         ret, frame = defaultVideo.read()
@@ -66,7 +73,7 @@ def get_next_video_frame(mix=1.0):
             video.set(cv2.CAP_PROP_POS_FRAMES, 0)
             _, frame = video.read()
 
-    if mix < 1.0 and mix > 0.0:
+    if BLENDING_ACTIVE:
         ret, frame2 = video2.read()
         if not ret:
             video2.set(cv2.CAP_PROP_POS_FRAMES, 0)
@@ -92,9 +99,14 @@ def zoom_and_crop(frame, target_width, target_height):
 
 
 def update_frame():
-    global label, frame_delay
+    global label, frame_delay, tk_frame
+    frame_num = tk_frame.get()
 
-    frame = cv2.cvtColor(get_next_video_frame(video_mix), cv2.COLOR_BGR2RGB)
+    variable_mix = video_mix
+    if BLENDING_ACTIVE:
+        variable_mix = min(max(0.25 * (math.sin(frame_num * 0.085) + 1), 0.0), 0.5)
+
+    frame = cv2.cvtColor(get_next_video_frame(variable_mix), cv2.COLOR_BGR2RGB)
     frame = zoom_and_crop(
         frame, root.winfo_screenheight() // 2, root.winfo_screenheight()
     )
@@ -105,6 +117,7 @@ def update_frame():
     label.imgtk = imgtk
     label.config(image=imgtk)
 
+    tk_frame.set(tk_frame.get() + 1)
     root.after(frame_delay, update_frame)
 
 
