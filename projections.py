@@ -103,7 +103,7 @@ def update_frame():
     frame_num = tk_frame.get()
 
     variable_mix = video_mix
-    if BLENDING_ACTIVE:
+    if BLENDING_ACTIVE and video_mix != 0.0:
         variable_mix = min(max(0.25 * (math.sin(frame_num * 0.085) + 1), 0.0), 0.5)
 
     frame = cv2.cvtColor(get_next_video_frame(variable_mix), cv2.COLOR_BGR2RGB)
