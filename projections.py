@@ -73,13 +73,13 @@ def get_next_video_frame(mix=1.0):
             video.set(cv2.CAP_PROP_POS_FRAMES, 0)
             _, frame = video.read()
 
-    if BLENDING_ACTIVE:
-        ret, frame2 = video2.read()
-        if not ret:
-            video2.set(cv2.CAP_PROP_POS_FRAMES, 0)
-            _, frame2 = video2.read()
+        if BLENDING_ACTIVE:
+            ret, frame2 = video2.read()
+            if not ret:
+                video2.set(cv2.CAP_PROP_POS_FRAMES, 0)
+                _, frame2 = video2.read()
 
-        frame = cv2.addWeighted(frame, mix, frame2, 1.0 - mix, 0)
+            frame = cv2.addWeighted(frame, mix, frame2, 1.0 - mix, 0)
 
     return frame
 
