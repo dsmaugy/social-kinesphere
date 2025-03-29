@@ -59,7 +59,7 @@ frame_delay = 100
 video_mix = 0.0
 
 
-def get_next_video_frame(mix=1.0):
+def get_next_video_frame(mix=1.0, perform_blending=False):
     global video, video2, defaultVideo, BLENDING_ACTIVE
 
     if mix == 0.0:
@@ -73,7 +73,7 @@ def get_next_video_frame(mix=1.0):
             video.set(cv2.CAP_PROP_POS_FRAMES, 0)
             _, frame = video.read()
 
-        if BLENDING_ACTIVE:
+        if perform_blending:
             ret, frame2 = video2.read()
             if not ret:
                 video2.set(cv2.CAP_PROP_POS_FRAMES, 0)
@@ -103,10 +103,13 @@ def update_frame():
     frame_num = tk_frame.get()
 
     variable_mix = video_mix
-    if BLENDING_ACTIVE and video_mix != 0.0:
+    should_blend = BLENDING_ACTIVE and video_mix == 1.0
+    if should_blend:
         variable_mix = min(max(0.25 * (math.sin(frame_num * 0.085) + 1), 0.0), 0.5)
 
-    frame = cv2.cvtColor(get_next_video_frame(variable_mix), cv2.COLOR_BGR2RGB)
+    frame = cv2.cvtColor(
+        get_next_video_frame(variable_mix, should_blend), cv2.COLOR_BGR2RGB
+    )
     frame = zoom_and_crop(
         frame, root.winfo_screenheight() // 2, root.winfo_screenheight()
     )
