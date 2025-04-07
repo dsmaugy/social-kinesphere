@@ -59,7 +59,7 @@ frame_delay = 100
 video_mix = 0.0
 
 
-def get_next_video_frame(mix=1.0):
+def get_next_video_frame(mix=1.0, perform_blending=False):
     global video, video2, defaultVideo, BLENDING_ACTIVE
 
     if mix == 0.0:
@@ -67,16 +67,19 @@ def get_next_video_frame(mix=1.0):
         if not ret:
             defaultVideo.set(cv2.CAP_PROP_POS_FRAMES, 0)
             _, frame = defaultVideo.read()
-    elif mix == 0.5:
+    else:
         ret, frame = video.read()
         if not ret:
             video.set(cv2.CAP_PROP_POS_FRAMES, 0)
             _, frame = video.read()
-    else:
-        ret, frame = video2.read()
-        if not ret:
-            video2.set(cv2.CAP_PROP_POS_FRAMES, 0)
-            _, frame = video2.read()
+
+        if perform_blending:
+            ret, frame2 = video2.read()
+            if not ret:
+                video2.set(cv2.CAP_PROP_POS_FRAMES, 0)
+                _, frame2 = video2.read()
+
+            frame = cv2.addWeighted(frame, mix, frame2, 1.0 - mix, 0)
 
     return frame
 
@@ -96,11 +99,20 @@ def zoom_and_crop(frame, target_width, target_height):
 
 
 def update_frame():
-    global label, frame_delay, tk_frame, video_mix
+    global label, frame_delay, tk_frame
     frame_num = tk_frame.get()
 
-    frame = cv2.cvtColor(get_next_video_frame(video_mix), cv2.COLOR_BGR2RGB)
-    frame = zoom_and_crop(frame, root.winfo_screenheight(), root.winfo_screenheight())
+    variable_mix = video_mix
+    should_blend = BLENDING_ACTIVE and video_mix == 1.0
+    if should_blend:
+        variable_mix = min(max(0.25 * (math.sin(frame_num * 0.085) + 1), 0.0), 0.5)
+
+    frame = cv2.cvtColor(
+        get_next_video_frame(variable_mix, should_blend), cv2.COLOR_BGR2RGB
+    )
+    frame = zoom_and_crop(
+        frame, root.winfo_screenheight() // 2, root.winfo_screenheight()
+    )
 
     img = Image.fromarray(frame)
     imgtk = ImageTk.PhotoImage(image=img)
